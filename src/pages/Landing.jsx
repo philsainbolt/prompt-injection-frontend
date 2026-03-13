@@ -16,7 +16,11 @@ export default function Landing() {
 
       try {
         const res = await progressAPI.get();
-        const remote = Array.isArray(res.data?.beatenLevels) ? res.data.beatenLevels : [];
+        const remote = Array.isArray(res.data?.beatenLevels)
+          ? res.data.beatenLevels
+          : Array.isArray(res.data?.beaten)
+            ? res.data.beaten
+            : [];
         const merged = mergeProgress(local, remote);
         setBeatenLevels(merged);
         saveLocalProgress(merged);

@@ -13,5 +13,10 @@ export const progressAPI = {
 };
 
 export const challengeAPI = {
-  submit: (id, prompt) => api.post(`/api/challenges/${id}/submit`, { prompt }),
+  submit: (id, userPrompt) =>
+    api.post(`/api/challenges/${id}/submit`, {
+      userPrompt,
+      // Keep legacy key for backward compatibility with older backend builds.
+      prompt: userPrompt,
+    }),
 };
