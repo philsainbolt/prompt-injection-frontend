@@ -1,9 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
+import { authAPI } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Landing() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = async ({ email, password }) => {
+    const response = await authAPI.login(email, password);
+    login(response.data.user, response.data.token);
+    navigate('/dashboard');
+  };
+
+  const handleSignup = async ({ username, email, password }) => {
+    await authAPI.register(username, email, password);
+    const loginResponse = await authAPI.login(email, password);
+    login(loginResponse.data.user, loginResponse.data.token);
+    navigate('/dashboard');
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 px-6 py-10">
       <div className="mx-auto max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -17,11 +34,11 @@ export default function Landing() {
         <section className="space-y-6">
           <div className="border border-slate-700 bg-slate-900 rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Login</h2>
-            <LoginForm />
+            <LoginForm onSubmit={handleLogin} />
           </div>
           <div className="border border-slate-700 bg-slate-900 rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Create Account</h2>
-            <SignupForm />
+            <SignupForm onSubmit={handleSignup} />
           </div>
         </section>
       </div>

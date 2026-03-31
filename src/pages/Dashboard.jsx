@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import NavBar from '../components/NavBar';
 import ChallengeCard from '../components/ChallengeCard';
 import { useChallenges } from '../hooks/useChallenges';
 import { useAuth } from '../hooks/useAuth';
@@ -36,29 +37,24 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-600">Prompt Injection</h1>
-          <div className="flex gap-4">
-            <Link to="/profile" className="text-gray-700 hover:text-blue-600">
-              Profile
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <NavBar>
+        <Link to="/profile" className="text-slate-300 hover:text-cyan-400">
+          Profile
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600"
+        >
+          Logout
+        </button>
+      </NavBar>
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="text-3xl font-bold mb-8">Available Challenges</h2>
 
-        {loading && <p>Loading challenges...</p>}
-        {error && <p className="text-red-500">Error loading challenges: {error}</p>}
+        {loading && <p className="text-slate-300">Loading challenges...</p>}
+        {error && <p className="text-rose-400">Error loading challenges: {error}</p>}
 
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

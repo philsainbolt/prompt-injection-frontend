@@ -49,3 +49,10 @@ export const challengeAPI = {
       prompt: userPrompt,
     }),
 };
+
+export const submissionAPI = {
+  getAll: () => api.get('/api/submissions'),
+  getById: (id) => api.get(`/api/submissions/${id}`),
+  update: (id, data) => api.put(`/api/submissions/${id}`, data),
+  delete: (id) => api.delete(`/api/submissions/${id}`),
+};

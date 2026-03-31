@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authAPI } from '../services/api';
-import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react';
+import FormInput from './FormInput';
 
-export default function LoginForm() {
+export default function LoginForm({ onSubmit }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,11 +13,9 @@ export default function LoginForm() {
     setError('');
 
     try {
-      const response = await authAPI.login(email, password);
-      login(response.data.user, response.data.token);
-      navigate('/dashboard');
+      await onSubmit({ email, password });
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError(err.response?.data?.error || err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -29,27 +23,25 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4" data-testid="login-form">
-      {error && <div className="p-4 bg-red-100 text-red-700 rounded">{error}</div>}
-      <input
+      {error && <div className="p-4 bg-rose-500/10 text-rose-300 border border-rose-500/40 rounded">{error}</div>}
+      <FormInput
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <input
+      <FormInput
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
-        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+        className="w-full bg-cyan-500 text-slate-950 font-semibold py-2 rounded hover:bg-cyan-400 disabled:opacity-50"
       >
         {loading ? 'Logging in...' : 'Login'}
       </button>
