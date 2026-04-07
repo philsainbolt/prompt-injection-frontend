@@ -2,33 +2,39 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import ChallengeCard from '../components/ChallengeCard';
-import { useChallenges } from '../hooks/useChallenges';
 import { useAuth } from '../hooks/useAuth';
-import { progressAPI } from '../services/api';
+import { progressAPI, challengeAPI } from '../services/api';
 import { isLevelUnlocked } from '../services/progress';
 
 export default function Dashboard() {
-  const { challenges, loading, error } = useChallenges();
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [challenges, setChallenges] = useState([]);
   const [beatenLevels, setBeatenLevels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadProgress = async () => {
+    const loadData = async () => {
       try {
-        const res = await progressAPI.get();
-        const levels = Array.isArray(res.data?.beatenLevels)
-          ? res.data.beatenLevels
-          : Array.isArray(res.data?.beaten)
-            ? res.data.beaten
+        const [challengeRes, progressRes] = await Promise.all([
+          challengeAPI.getAll(),
+          progressAPI.get(),
+        ]);
+        setChallenges(challengeRes.data || []);
+        const levels = Array.isArray(progressRes.data?.beatenLevels)
+          ? progressRes.data.beatenLevels
+          : Array.isArray(progressRes.data?.beaten)
+            ? progressRes.data.beaten
             : [];
         setBeatenLevels(levels);
-      } catch {
-        setBeatenLevels([]);
+      } catch (err) {
+        setError(err.response?.data?.error || 'Failed to load data');
+      } finally {
+        setLoading(false);
       }
     };
-
-    loadProgress();
+    loadData();
   }, []);
 
   const handleLogout = () => {

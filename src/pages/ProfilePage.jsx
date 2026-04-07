@@ -9,14 +9,15 @@ function SubmissionRow({ submission, onUpdate, onDelete }) {
   const [editText, setEditText] = useState(submission.userPrompt || '');
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSave = async () => {
     setSaving(true);
     try {
       await onUpdate(submission._id || submission.id, { userPrompt: editText });
       setEditing(false);
-    } catch {
-      // error handled by hook
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to save changes');
     } finally {
       setSaving(false);
     }
@@ -25,8 +26,8 @@ function SubmissionRow({ submission, onUpdate, onDelete }) {
   const handleDelete = async () => {
     try {
       await onDelete(submission._id || submission.id);
-    } catch {
-      // error handled by hook
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete submission');
     }
     setConfirmDelete(false);
   };
@@ -41,6 +42,7 @@ function SubmissionRow({ submission, onUpdate, onDelete }) {
 
   return (
     <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 space-y-3">
+      {error && <p className="text-sm text-rose-400">{error}</p>}
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-slate-300">
           Level {submission.challengeId || submission.level || '?'}

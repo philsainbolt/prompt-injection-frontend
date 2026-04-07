@@ -1,3 +1,5 @@
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-4-646CFF?logo=vite&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white) ![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white) ![Netlify Status](https://img.shields.io/badge/Netlify-Deployed-00C7B7?logo=netlify&logoColor=white) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 # You Shall Not Inject
 
 A 5-level prompt injection challenge app. Craft adversarial prompts, bypass LLM guardrails, and learn how prompt injection actually works -- by doing it.

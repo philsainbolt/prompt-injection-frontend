@@ -29,6 +29,11 @@ export default function ChallengePage() {
     return result.data || {};
   };
 
+  const handleGuess = async (password, submissionId) => {
+    const result = await challengeAPI.guess(id, password, submissionId);
+    return result.data || {};
+  };
+
   if (loading) {
     return <div className="min-h-screen bg-slate-950 text-slate-100 p-6">Loading challenge...</div>;
   }
@@ -42,5 +47,5 @@ export default function ChallengePage() {
     );
   }
 
-  return <ChallengeWorkspace challenge={challenge} onSubmit={handleSubmit} />;
+  return <ChallengeWorkspace key={id} challenge={challenge} onSubmit={handleSubmit} onGuess={handleGuess} />;
 }

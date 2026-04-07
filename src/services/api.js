@@ -44,15 +44,13 @@ export const challengeAPI = {
   getAll: () => api.get('/api/challenges'),
   getById: (id) => api.get(`/api/challenges/${id}`),
   submit: (id, userPrompt) =>
-    api.post(`/api/challenges/${id}/submit`, {
-      userPrompt,
-      prompt: userPrompt,
-    }),
+    api.post(`/api/challenges/${id}/submit`, { userPrompt, prompt: userPrompt }),
+  guess: (id, password, submissionId) =>
+    api.post(`/api/challenges/${id}/guess`, { password, submissionId }),
 };
 
 export const submissionAPI = {
   getAll: () => api.get('/api/submissions'),
-  getById: (id) => api.get(`/api/submissions/${id}`),
   update: (id, data) => api.put(`/api/submissions/${id}`, data),
   delete: (id) => api.delete(`/api/submissions/${id}`),
 };
