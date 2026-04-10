@@ -25,13 +25,23 @@ export default function ChallengePage() {
   }, [id]);
 
   const handleSubmit = async (prompt) => {
-    const result = await challengeAPI.submit(id, prompt);
-    return result.data || {};
+    try {
+      const result = await challengeAPI.submit(id, prompt);
+      return result.data || {};
+    } catch (err) {
+      console.error('Submit failed:', err);
+      throw err;
+    }
   };
 
   const handleGuess = async (password, submissionId) => {
-    const result = await challengeAPI.guess(id, password, submissionId);
-    return result.data || {};
+    try {
+      const result = await challengeAPI.guess(id, password, submissionId);
+      return result.data || {};
+    } catch (err) {
+      console.error('Guess failed:', err);
+      throw err;
+    }
   };
 
   if (loading) {

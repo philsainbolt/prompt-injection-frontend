@@ -24,13 +24,23 @@ export function useSubmissions() {
   }, [fetchSubmissions]);
 
   const deleteSubmission = async (id) => {
-    await submissionAPI.delete(id);
-    await fetchSubmissions();
+    try {
+      await submissionAPI.delete(id);
+      await fetchSubmissions();
+    } catch (err) {
+      console.error('Delete submission failed:', err);
+      throw err;
+    }
   };
 
   const updateSubmission = async (id, data) => {
-    await submissionAPI.update(id, data);
-    await fetchSubmissions();
+    try {
+      await submissionAPI.update(id, data);
+      await fetchSubmissions();
+    } catch (err) {
+      console.error('Update submission failed:', err);
+      throw err;
+    }
   };
 
   return { submissions, loading, error, deleteSubmission, updateSubmission, refresh: fetchSubmissions };

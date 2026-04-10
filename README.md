@@ -24,6 +24,14 @@ A 5-level prompt injection challenge app. Craft adversarial prompts, bypass LLM 
 - **Vitest** + jsdom + React Testing Library for unit tests
 - **Playwright** for E2E tests
 
+## Design Decisions
+
+- **React 18** — Component-based architecture makes it natural to build each challenge level as an isolated, reusable view. The ecosystem and community support made it the clear choice for a single-page application.
+- **Vite** — Chosen over Create React App for significantly faster hot module replacement during development and leaner production builds. Native ES module support eliminates bundling overhead in dev.
+- **Tailwind CSS** — Utility-first approach enables rapid UI iteration without context-switching to separate stylesheets. Custom theme configuration made it straightforward to implement the LOTR-inspired fantasy aesthetic consistently across all components.
+- **Axios** — Provides interceptors for attaching JWT tokens and handling 401 responses globally, which simplified the auth flow compared to the native Fetch API.
+- **Vitest + Playwright** — Vitest integrates natively with Vite's transform pipeline so tests run against the same config as the dev server. Playwright provides reliable cross-browser E2E testing with auto-waiting, critical for testing the multi-step challenge flows.
+
 ## Getting Started
 
 ### Prerequisites
@@ -153,7 +161,9 @@ Playwright config auto-starts both the backend (port 5000, `E2E_MODE=true`) and 
 
 ## Deployment
 
-Deployed on **Netlify**. The `netlify.toml` handles build config and SPA routing:
+Deployed on **Netlify**. The backend REST API is deployed on **Render** at `https://prompt-injection-backend.onrender.com`. The Netlify proxy redirect forwards all `/api/*` requests to the Render backend, eliminating CORS issues without requiring a permissive CORS policy on the server.
+
+The `netlify.toml` handles build config, the API proxy, and SPA routing:
 
 ```toml
 [build]
@@ -161,12 +171,16 @@ Deployed on **Netlify**. The `netlify.toml` handles build config and SPA routing
   publish = "dist"
 
 [[redirects]]
+  from = "/api/*"
+  to = "https://prompt-injection-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 ```
-
-Set `VITE_API_URL` as an environment variable in Netlify to point at your production backend.
 
 ## Credits
 

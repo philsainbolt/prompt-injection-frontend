@@ -7,6 +7,7 @@ export const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Attach JWT token to every outgoing request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -15,6 +16,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Auto-logout and redirect on 401 (expired/invalid token)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
